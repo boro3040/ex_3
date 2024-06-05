@@ -43,15 +43,29 @@ public class Rectangle {
         edges.add(new Line(lowerLeft, this.upperLeft));
     }
 
-    // Return a (possibly empty) List of intersection points
-    // with the specified line.
-
     /**
-     *
-     * @param line
-     * @return
+     * this method make the list of intersection points between the rectangle.
+     * and the line.
+     * @param line the line we want to intersect with.
+     * @return a (possibly empty) List of intersection points.
      */
-    public java.util.List<Point> intersectionPoints(Line line);
+    public List<Point> intersectionPoints(Line line) {
+        List<Point> intersections = new ArrayList<>();
+        for (Line edge : this.edges) {
+            Point tempPoint = line.intersectionWith(edge);
+            // check if there is point like is in the list already.
+            boolean equalFlag = false;
+            for (Point intersectionPoint : intersections) {
+                if (tempPoint.equals(intersectionPoint)) {
+                    equalFlag = true;
+                }
+            }
+            if (!equalFlag) {
+                intersections.add(tempPoint);
+            }
+        }
+        return intersections;
+    }
 
     /**
      * get the Rectangle width.

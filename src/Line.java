@@ -3,6 +3,7 @@ Barak Davidovitch
 211604350
 OOP ex2
  */
+import java.util.List;
 
 /**
  * This Line class is class of line-segments that starts in one point in
@@ -233,5 +234,27 @@ public class Line {
         }
         return Util.isEqual(startX1, endX2) && Util.isEqual(startY1, endY2)
                 && Util.isEqual(endX1, startX2) && Util.isEqual(endY1, startY2);
+    }
+
+    /**
+     * return the closest intersection point of rectangle and this line.
+     * @param rect the rectangle we want to find the intersections with him.
+     * @return the closest intersection point to the start of the line,
+     * if this line does not intersect with the rectangle, return null.
+     */
+    public Point closestIntersectionToStartOfLine(Rectangle rect) {
+        List<Point> intersections = rect.intersectionPoints(this);
+        if (intersections.isEmpty()) {
+            return null;
+        }
+        Point closestPoint = intersections.get(0);
+        // find the closest Point to this.start.
+        for (int i = 1; i < intersections.size(); i++) {
+            if (Util.isSmaller(intersections.get(i).distance(this.start),
+                                closestPoint.distance(this.start))) {
+                closestPoint = intersections.get(i);
+            }
+        }
+        return closestPoint;
     }
 }
