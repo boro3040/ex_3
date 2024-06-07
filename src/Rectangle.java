@@ -44,6 +44,15 @@ public class Rectangle {
     }
 
     /**
+     * copy constructor.
+     * @param rectangle the Rectangle we want to copy.
+     */
+    public Rectangle(Rectangle rectangle) {
+        this(rectangle.getUpperLeft(), rectangle.getWidth(),
+                rectangle.getHeight());
+    }
+
+    /**
      * this method make the list of intersection points between the rectangle.
      * and the line.
      * @param line the line we want to intersect with.
@@ -53,6 +62,9 @@ public class Rectangle {
         List<Point> intersections = new ArrayList<>();
         for (Line edge : this.edges) {
             Point tempPoint = line.intersectionWith(edge);
+            if (tempPoint == null) {
+                continue;
+            }
             // check if there is point like is in the list already.
             boolean equalFlag = false;
             for (Point intersectionPoint : intersections) {
@@ -89,5 +101,37 @@ public class Rectangle {
      */
     public Point getUpperLeft() {
         return new Point(this.upperLeft);
+    }
+
+    /**
+     * give the min X value in the rectangle.
+     * @return min X of the upper left point, that is the smallest X in rectangle.
+     */
+    public double getMinX() {
+        return this.upperLeft.getX();
+    }
+
+    /**
+     * give the min y value in the rectangle.
+     * @return min y of the upper left point, that is the smallest y in rectangle.
+     */
+    public double getMinY() {
+        return this.upperLeft.getY();
+    }
+
+    /**
+     * give the max X value in the rectangle.
+     * @return max X of the lower right point, that is the biggest X in rectangle.
+     */
+    public double getMaxX() {
+        return this.upperLeft.getX() + this.width;
+    }
+
+    /**
+     * give the max y value in the rectangle.
+     * @return max y of the lower right point, that is the biggest y in rectangle.
+     */
+    public double getMaxY() {
+        return this.upperLeft.getY() + this.height;
     }
 }

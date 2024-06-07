@@ -6,8 +6,6 @@ OOP ex2
 
 import biuoop.DrawSurface;
 import java.awt.Color;
-import java.awt.Rectangle;
-import java.util.ArrayList;
 
 /**
  * Class representing balls.
@@ -20,27 +18,24 @@ public class Ball {
     The limits of the screen that the bouncing ball can get.
     I entered default values.
     */
-    private static final Rectangle SCREEN = new Rectangle(0, 0, 200, 200);
-
     private Point center;
     private final int radius;
     private final Color color;
     private Velocity velocity;
-    private final ArrayList<Rectangle> insideRectanglesArray;
-    private final ArrayList<Rectangle> outsideRectanglesArray;
+    private final GameEnvironment ge;
 
     /**
      * The constructor of the ball.
      * @param center The center point object Point.
      * @param r The radius of the ball.
      * @param color The color of the ball from Color class.
+     * @param ge The gameEnvironment with the collidables of the game.
      */
-    public Ball(Point center, int r, java.awt.Color color) {
+    public Ball(Point center, int r, java.awt.Color color, GameEnvironment ge) {
         this.center = center;
         this.radius = r;
         this.color = color;
-        this.insideRectanglesArray = new ArrayList<Rectangle>();
-        this.outsideRectanglesArray = new ArrayList<Rectangle>();
+        this.ge = ge;
     }
 
     /**
@@ -49,13 +44,13 @@ public class Ball {
      * @param y the y value of the center.
      * @param r The radius of the ball.
      * @param color The color of the ball from Color class.
+     * @param ge The gameEnvironment with the collidables of the game.
      */
-    public Ball(int x, int y, int r, java.awt.Color color) {
+    public Ball(int x, int y, int r, java.awt.Color color, GameEnvironment ge) {
         this.center = new Point(x, y);
         this.radius = r;
         this.color = color;
-        this.insideRectanglesArray = new ArrayList<Rectangle>();
-        this.outsideRectanglesArray = new ArrayList<Rectangle>();
+        this.ge = ge;
     }
 
     /**
@@ -64,13 +59,14 @@ public class Ball {
      * @param y the y value of the center.
      * @param r The radius of the ball.
      * @param color The color of the ball from Color class.
+     * @param ge The gameEnvironment with the collidables of the game.
      */
-    public Ball(double x, double y, int r, java.awt.Color color) {
+    public Ball(double x, double y, int r, java.awt.Color color,
+                GameEnvironment ge) {
         this.center = new Point(x, y);
         this.radius = r;
         this.color = color;
-        this.insideRectanglesArray = new ArrayList<Rectangle>();
-        this.outsideRectanglesArray = new ArrayList<Rectangle>();
+        this.ge = ge;
     }
 
     /**
@@ -98,27 +94,22 @@ public class Ball {
     }
 
     /**
+     * get the ball center.
+     * @return Point copy Object of center.
+     */
+    public Point getCenter() {
+        if (this.center == null) {
+            return null;
+        }
+        return new Point(this.center);
+    }
+
+    /**
      * get the color of the ball.
      * @return The color in Color object.
      */
     public java.awt.Color getColor() {
         return this.color;
-    }
-
-    /**
-     * get the width of the screen limits of the ball.
-     * @return the width of screen.
-     */
-    public static double getWidth() {
-        return SCREEN.getWidth();
-    }
-
-    /**
-     * get the height of the screen limits of the ball.
-     * @return the height of screen.
-     */
-    public static double getHeight() {
-        return SCREEN.getHeight();
     }
 
     /**
@@ -157,34 +148,27 @@ public class Ball {
 
     /**
      * Move the ball center one step with the velocity of him.
-     * also check the intersection points with all rectangles in screen and move
+     * also check the intersection points with all Collidables and move
      * center when needed.
      */
     public void moveOneStep() {
-        Point newCenter;
-        // find new center if there is intersection.
-        newCenter = this.rectangleIntersection(SCREEN, 1);
-        for (Rectangle r: this.outsideRectanglesArray) {
-            newCenter = this.center.findClosestPoint(newCenter,
-                        this.rectangleIntersection(r, -1));
-        }
-        for (Rectangle r: this.insideRectanglesArray) {
-            newCenter = this.center.findClosestPoint(newCenter,
-                        this.rectangleIntersection(r, 1));
-        }
-        // one step forward.
-        if (newCenter == null) {
-            this.center = this.getVelocity().applyToPoint(this.center);
+        Point startPoint = this.center;
+        Point endPoint = this.getVelocity().applyToPoint(this.center);
+        Line trajectory = new Line(startPoint, endPoint);
+
+        CollisionInfo colInfo = this.ge.getClosestCollision(trajectory);
+        if (colInfo == null) {
+            this.center = trajectory.end();
             return;
         }
-        this.center = newCenter;
-        if (newCenter.getScreenXoRY() == 1) {
-            this.velocity = new Velocity(-this.velocity.getDx(),
-                                        this.velocity.getDy());
-        } else {
-            this.velocity = new Velocity(this.velocity.getDx(),
-                                        -this.velocity.getDy());
-        }
+
+        // change the Velocity of the ball
+        this.center = trajectory.middle();
+        Block colBlock = (Block) colInfo.collisionObject();
+        this.velocity = colBlock.hit(colInfo.collisionPoint(), this.velocity);
+
+        // change the center of ball to touch the block
+//        this.center = this.rectangleIntersection(colBlock.getCollisionRectangle(), -1);
     }
 
     /**
@@ -351,39 +335,5 @@ public class Ball {
                             rectangle.getMaxY())
                     || Util.isSmaller(this.center.getY() + this.radius,
                             rectangle.getMinY());
-    }
-
-    /**
-     * Set the static parameters of screen size.
-     * @param width the width of screen, ball can't pass this.
-     * @param height the height of screen, ball can't pass this.
-     */
-    public static void setWidthHeight(int width, int height) {
-        SCREEN.setBounds(0, 0, width, height);
-    }
-
-    /**
-     * get the screen in Rectangle shape.
-     * @return the screen the ball inside.
-     */
-    public static Rectangle getScreen() {
-        return new Rectangle(0, 0, (int) SCREEN.getWidth(),
-                            (int) SCREEN.getHeight());
-    }
-
-    /**
-     * add new rectangle to the end of inside rectangles list.
-     * @param rectangle the wanted rectangle.
-     */
-    public void addInsideRectangle(Rectangle rectangle) {
-        this.insideRectanglesArray.add(rectangle);
-    }
-
-    /**
-     * add new rectangle to the end of outside rectangles list.
-     * @param rectangle the wanted rectangle.
-     */
-    public void addOutsideRectangle(Rectangle rectangle) {
-        this.outsideRectanglesArray.add(rectangle);
     }
 }

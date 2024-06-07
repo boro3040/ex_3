@@ -255,6 +255,6 @@ public class Line {
                 closestPoint = intersections.get(i);
             }
         }
-        return closestPoint;
+        return new Point(closestPoint);
     }
 }
