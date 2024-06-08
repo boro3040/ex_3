@@ -12,7 +12,7 @@ import java.awt.Color;
  * balls have size, color, and center location.
  * they know how to draw themselves.
  */
-public class Ball {
+public class Ball implements Sprite {
 
     /*
     The limits of the screen that the bouncing ball can get.
@@ -120,13 +120,15 @@ public class Ball {
         return new Velocity(this.velocity.getDx(), this.velocity.getDy());
     }
 
-    /**
-     * draw the ball on the given DrawSurface.
-     * @param surface The draw surface we want to draw on.
-     */
-    public void drawOn(DrawSurface surface) {
-        surface.setColor(this.color);
-        surface.fillCircle(this.getX(), this.getY(), this.radius);
+    @Override
+    public void drawOn(DrawSurface d) {
+        d.setColor(this.color);
+        d.fillCircle(this.getX(), this.getY(), this.radius);
+    }
+
+    @Override
+    public void timePassed() {
+        moveOneStep();
     }
 
     /**
@@ -162,13 +164,11 @@ public class Ball {
             return;
         }
 
+        // change the center of ball to almost touch the block
+        this.center = trajectory.start();
         // change the Velocity of the ball
-        this.center = trajectory.middle();
         Block colBlock = (Block) colInfo.collisionObject();
         this.velocity = colBlock.hit(colInfo.collisionPoint(), this.velocity);
-
-        // change the center of ball to touch the block
-//        this.center = this.rectangleIntersection(colBlock.getCollisionRectangle(), -1);
     }
 
     /**
