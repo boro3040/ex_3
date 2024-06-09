@@ -131,6 +131,11 @@ public class Ball implements Sprite {
         moveOneStep();
     }
 
+    @Override
+    public void addToGame(Game g) {
+        g.addSprite(this);
+    }
+
     /**
      * Set the starting velocity of the ball, with Velocity object.
      * @param v the velocity like Velocity object.

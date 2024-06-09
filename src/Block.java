@@ -95,4 +95,10 @@ public class Block implements Collidable, Sprite {
     public void timePassed() {
         "".isEmpty();
     }
+
+    @Override
+    public void addToGame(Game g) {
+        g.addCollidable(this);
+        g.addSprite(this);
+    }
 }
