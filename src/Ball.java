@@ -120,10 +120,22 @@ public class Ball implements Sprite {
         return new Velocity(this.velocity.getDx(), this.velocity.getDy());
     }
 
+    /**
+     * get the Game environment.
+     * @return the ge.
+     */
+    public GameEnvironment getGe() {
+        return this.ge;
+    }
+
     @Override
     public void drawOn(DrawSurface d) {
         d.setColor(this.color);
         d.fillCircle(this.getX(), this.getY(), this.radius);
+        d.setColor(Color.RED);
+        d.fillCircle(this.getX(), this.getY(), 2);
+        d.setColor(Color.BLACK);
+        d.drawCircle(this.getX(), this.getY(), this.radius);
     }
 
     @Override
@@ -134,6 +146,7 @@ public class Ball implements Sprite {
     @Override
     public void addToGame(Game g) {
         g.addSprite(this);
+        g.addBall(this);
     }
 
     /**
@@ -172,8 +185,17 @@ public class Ball implements Sprite {
         // change the center of ball to almost touch the block
         this.center = trajectory.start();
         // change the Velocity of the ball
-        Block colBlock = (Block) colInfo.collisionObject();
-        this.velocity = colBlock.hit(colInfo.collisionPoint(), this.velocity);
+        Collidable colObj = colInfo.collisionObject();
+        this.velocity = colObj.hit(colInfo.collisionPoint(), this.velocity);
+    }
+
+    /**
+     * Move the Ball x in x-axis and y in y-axis.
+     * @param x the distance we want to move on x-axes (can be negative too).
+     * @param y the distance we want to move on y-axes (can be negative too).
+     */
+    public void moveBall(double x, double y) {
+        this.center.movePoint(x, y);
     }
 
     /**

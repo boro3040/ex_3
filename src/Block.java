@@ -53,6 +53,16 @@ public class Block implements Collidable, Sprite {
         this.outsideColor = color;
     }
 
+    /**
+     * The copy constructor.
+     * @param b The block we want to copy.
+     */
+    public Block(Block b) {
+        this.rectangle = new Rectangle(b.getRectangle());
+        this.insideColor = b.insideColor;
+        this.outsideColor = b.outsideColor;
+    }
+
     @Override
     public Rectangle getCollisionRectangle() {
         return new Rectangle(this.rectangle);
@@ -100,5 +110,32 @@ public class Block implements Collidable, Sprite {
     public void addToGame(Game g) {
         g.addCollidable(this);
         g.addSprite(this);
+    }
+
+    /**
+     * add the screen only like sprite and not collidable.
+     * @param g The game we want to add for.
+     */
+    public void addScreenToGame(Game g) {
+        g.addSprite(this);
+    }
+
+    /**
+     * move the block to new place by velocity vector.
+     * @param velX the x-axis velocity.
+     * @param velY the y-axis velocity.
+     */
+    public void moveBlock(double velX, double velY) {
+        Point upperLeft = this.rectangle.getUpperLeft();
+        upperLeft.movePoint(velX, velY);
+        this.rectangle.setUpperLeft(upperLeft);
+    }
+
+    /**
+     * This method return a copy of the rectangle.
+     * @return the rectangle making the block.
+     */
+    public Rectangle getRectangle() {
+        return new Rectangle(this.rectangle);
     }
 }

@@ -9,8 +9,8 @@ OOP ex2
  * that connect between lines and points.
  */
 public class Point {
-    private final double x;
-    private final double y;
+    private double x;
+    private double y;
     /*
     a values that tell if this point is intersecting X or Y axes line (3.2).
     0 - not set yet. 1 - is intersection of Y-axes parallel.
@@ -157,5 +157,15 @@ public class Point {
      */
     public int getScreenXoRY() {
         return this.screenXoRY;
+    }
+
+    /**
+     * Move the point x in x-axis and y in y-axis.
+     * @param x the distance we want to move on x-axes (can be negative too).
+     * @param y the distance we want to move on y-axes (can be negative too).
+     */
+    public void movePoint(double x, double y) {
+        this.x = this.x + x;
+        this.y = this.y + y;
     }
 }

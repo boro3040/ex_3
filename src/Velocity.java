@@ -55,8 +55,21 @@ public class Velocity {
      * @return the Velocity object that fit this angle and speed.
      */
     public static Velocity fromAngleAndSpeed(double angle, double speed) {
-        double dx = Math.sin(Math.toRadians(angle)) * speed;
-        double dy = Math.cos(Math.toRadians(angle)) * speed;
-        return new Velocity(dx, dy);
+        // the screen axis are weird.
+        Velocity startVector = new Velocity(0, -speed);
+        return startVector.rotateVector(-angle);
+    }
+
+    /**
+     * rotate the Velocity vector in specific degrees.
+     * @param angle the angle we want to rotate, clockwise.
+     * @return the rotated Velocity vector.
+     */
+    public Velocity rotateVector(double angle) {
+        double newDx = Math.cos(Math.toRadians(angle)) * this.dx
+                    + Math.sin(Math.toRadians(angle)) * this.dy;
+        double newDy = -Math.sin(Math.toRadians(angle)) * this.dx
+                    + Math.cos(Math.toRadians(angle)) * this.dy;
+        return new Velocity(newDx, newDy);
     }
 }

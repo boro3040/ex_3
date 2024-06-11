@@ -67,4 +67,12 @@ public class GameEnvironment {
         }
         return new CollisionInfo(closestPoint, collidableObject);
     }
+
+    /**
+     * get all collidables in game.
+     * @return ArrayList of Collidables in game.
+     */
+    public List<Collidable> getCollidables() {
+        return new ArrayList<>(this.collidables);
+    }
 }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Rectangle {
 
-    private final Point upperLeft;
+    private Point upperLeft;
     private final double width;
     private final double height;
     private final List<Line> edges;
@@ -133,5 +133,13 @@ public class Rectangle {
      */
     public double getMaxY() {
         return this.upperLeft.getY() + this.height;
+    }
+
+    /**
+     * method that set the upperLeft point to newPoint.
+     * @param newPoint The point we want to switch to.
+     */
+    public void setUpperLeft(Point newPoint) {
+        this.upperLeft = new Point(newPoint);
     }
 }

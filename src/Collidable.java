@@ -28,4 +28,6 @@ public interface Collidable {
      * @param g the game we want to add to.
      */
     void addToGame(Game g);
+
+
 }
