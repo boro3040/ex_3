@@ -23,7 +23,7 @@ public class Paddle implements Sprite, Collidable {
 
     /**
      * constructor with rectangle and different colors to outside and inside.
-     * it's gives the block all this properties.
+     * it's gives the block all these properties.
      * @param rectangle the rectangle of the block.
      * @param insideColor the Color inside the block.
      * @param outsideColor the color outside the block.
@@ -152,19 +152,26 @@ public class Paddle implements Sprite, Collidable {
         double paddleX = this.block.getRectangle().getUpperLeft().getX();
         double relativeCollisionX = collisionX - paddleX;
         int region = (int) (relativeCollisionX / regionWidth) + 1;
+
         if (Util.isEqual(collisionPoint.getY(),
                 this.block.getRectangle().getUpperLeft().getY())
                 || Util.isEqual(collisionPoint.getY(),
                 this.block.getRectangle().getUpperLeft().getY()
                 + this.block.getRectangle().getHeight())) {
-            return switch (region) {
-                case 1 -> Velocity.fromAngleAndSpeed(300, speed);
-                case 2 -> Velocity.fromAngleAndSpeed(330, speed);
-                case 3 -> new Velocity(newDx, -newDy);
-                case 4 -> Velocity.fromAngleAndSpeed(30, speed);
-                case 5 -> Velocity.fromAngleAndSpeed(60, speed);
-                default -> new Velocity(newDx, newDy);
-            };
+            switch (region) {
+                case 1:
+                    return Velocity.fromAngleAndSpeed(300, speed);
+                case 2:
+                    return Velocity.fromAngleAndSpeed(330, speed);
+                case 3:
+                    return new Velocity(newDx, -newDy);
+                case 4:
+                    return Velocity.fromAngleAndSpeed(30, speed);
+                case 5:
+                    return Velocity.fromAngleAndSpeed(60, speed);
+                default:
+                    return new Velocity(newDx, newDy);
+            }
         }
         return new Velocity(newDx, newDy);
     }

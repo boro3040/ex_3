@@ -132,6 +132,8 @@ public class Ball implements Sprite {
     public void drawOn(DrawSurface d) {
         d.setColor(this.color);
         d.fillCircle(this.getX(), this.getY(), this.radius);
+
+        // draw red dot inside and black frame.
         d.setColor(Color.RED);
         d.fillCircle(this.getX(), this.getY(), 2);
         d.setColor(Color.BLACK);

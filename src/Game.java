@@ -67,7 +67,8 @@ public class Game {
      * @param angleDiff the difference between each balls start angels.
      * @param speed the initial speed of balls.
      */
-    private void initializeBalls(Point ballsStart, int ballsNum, double startAngle, double angleDiff, double speed) {
+    private void initializeBalls(Point ballsStart, int ballsNum, double startAngle,
+                                 double angleDiff, double speed) {
         int ballRadius = 5;
         for (int i = 0; i < ballsNum; i++) {
             Ball ball = new Ball(ballsStart, ballRadius, Color.WHITE, this.environment);
@@ -115,7 +116,8 @@ public class Game {
         screen.addScreenToGame(this);
 
         // add 2 ball to the game, in specific location, in middle of the screen.
-        initializeBalls(new Point((double) this.guiWidth / 2, (double) this.guiHeight * 3 / 4),
+        initializeBalls(new Point((double) this.guiWidth / 2,
+                        (double) this.guiHeight * 3 / 4),
                         2, -45, 90, 3);
 
         int paddleSize = 100;

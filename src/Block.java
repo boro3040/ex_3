@@ -103,6 +103,7 @@ public class Block implements Collidable, Sprite {
 
     @Override
     public void timePassed() {
+        // for now this method is empty.
         "".isEmpty();
     }
 
